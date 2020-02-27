@@ -34,7 +34,7 @@ public class Book {
 	@Column(name="unit_price")
 	private BigDecimal unitPrice;
 	
-	@Column(name="imageUrl")
+	
 	private String image_url;
 	
 	private boolean active;
