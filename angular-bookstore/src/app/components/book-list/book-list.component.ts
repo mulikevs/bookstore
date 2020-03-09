@@ -1,6 +1,7 @@
 import { BookService } from './../../services/book.service';
 import { Component, OnInit } from '@angular/core';
 import { Book } from 'src/app/common/book.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-book-list',
@@ -11,14 +12,32 @@ import { Book } from 'src/app/common/book.model';
 export class BookListComponent implements OnInit {
 
   books: Book[]=[]
-  constructor(private _bookService:BookService) { }
+  currentCategoryID:number;
+  constructor(private _bookService:BookService,
+              private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.lostBooks();
+    this._activatedRoute.paramMap.subscribe(()=>{
+      this.lostBooks();
+    });
   }
 
   lostBooks(){
-    this._bookService.getBooks().subscribe(
+
+    const hasCotegoryID: boolean =this._activatedRoute.snapshot.paramMap.has('id');
+
+    if(hasCotegoryID){
+
+     this.currentCategoryID= +this._activatedRoute.snapshot.paramMap.get('id');
+
+
+    }else{
+      this.currentCategoryID=1;
+    }
+
+
+
+    this._bookService.getBooks(this.currentCategoryID).subscribe(
       data =>this.books=data
     )
   }
